@@ -1,40 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+## 📋 Apresentação
 
-## Getting Started
+Esta é uma aplicação Next.js criada para resolver uma necessidade real que surgiu nas peladas semanais que frequento com parentes e amigos.
 
-First, run the development server:
+Sempre que íamos marcar uma pelada (ou “racha”, como dizemos aqui no Ceará), o processo começava no grupo do WhatsApp: alguém iniciava uma lista de nomes para confirmar quem toparia jogar no dia marcado. O problema é que, a cada novo interessado, era preciso copiar toda a lista, colar e reenviar no grupo — algo trabalhoso e propenso a confusões. Essa foi a primeira dor percebida, e logo veio a ideia: **“seria ótimo automatizar esse processo.”**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A segunda dor era o sorteio dos times. Normalmente, os jogadores eram escolhidos “a dedo”, o que frequentemente gerava desconforto. Os mais habilidosos sempre eram os primeiros a ser escolhidos, e os demais acabavam sobrando, formando times visivelmente desequilibrados. Isso acabava desmotivando parte da galera.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A partir desses dois problemas nasceu a ideia desta aplicação, cujo MVP é bem direto:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- ✅ Cada jogador pode confirmar presença em uma pelada com apenas um clique.  
+- ✅ O organizador, no início do jogo, faz o check-in dos presentes e clica em **“Sortear times”**, para uma divisão imparcial e aleatória.  
+- ✅ Também será possível visualizar um histórico das peladas anteriores, mostrando quem esteve presente.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Este projeto nasceu de uma necessidade real, e o objetivo é tornar a organização das peladas **mais prática, justa e divertida** para todos os participantes.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## MVP - Rotas e Fluxo da Aplicação
 
-## Learn More
+### 🗺️ Mapa de Rotas
 
-To learn more about Next.js, take a look at the following resources:
+| # | Rota (Pages Router) | Quem acessa | Objetivo principal | Componentes-chave |
+|---|---------------------|-------------|--------------------|-------------------|
+| 1 | `/` **(Home)** | Todos | Listar partidas abertas / ocorridas | `MatchCard` (data, local) • botão **Criar partida** |
+| 2 | `/novo` **(Criar partida)** | Organizador | Formulário para data, hora, local, nº máx de jogadores | `MatchForm` (DatePicker, Input) |
+| 3 | `/partida/[id]` **(Detalhe)** | Jogadores / Organizador | Ver detalhes e confirmar presença | Lista **Confirmados** • botão **Confirmar** |
+| 4 | `/partida/[id]/admin` **(Painel)** | Organizador | Fazer check-in e sortear times | Tabela **Presentes** (checkbox) • botão **Sortear times** |
+| 5 | `/times/[token]` **(Times sorteados)** | Todos (link) | Exibir resultado do sorteio | Cards Time A / Time B (somente leitura) |
+| 6 | `404.tsx` | — | Página de erro simpática | — |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+### 🔄 Fluxo Resumido
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Organizador** cria partida em `/novo`  
+   → recebe dois links:  
+   • público `/partida/123` • privado `/partida/123/admin`.
+2. **Jogadores** acessam `/partida/123`, clicam **Confirmar** e informam o nome.
+3. No dia do jogo, **organizador** abre `/partida/123/admin`, marca check-in e clica **Sortear times**.
+4. Sistema redireciona para `/times/XYZ`; link pode ser compartilhado no grupo.
 
-## Deploy on Vercel
+> **Autenticação:** MVP sem login. Jogador só informa **nome**.  
+> Ações de organizador protegidas por **token** (URL `/admin`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 📁 Estrutura de Arquivos (Next.js Pages Router)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.

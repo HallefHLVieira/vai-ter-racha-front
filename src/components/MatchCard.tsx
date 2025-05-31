@@ -15,12 +15,12 @@ export default function MatchCard({ date, location }: MatchCardProps) {
         <p className="font-semibold">{dateFormatted}</p>
         <p className="text-sm text-gray-500">{location}</p>
       </div>
-      {/* <a
+      <a
         href={`/partida/${encodeURIComponent(date)}`} // ajuste para id real
         className="text-blue-600 hover:underline text-sm"
       >
         Ver
-      </a> */}
+      </a>
     </div>
   )
 }

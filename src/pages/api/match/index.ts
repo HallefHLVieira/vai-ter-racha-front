@@ -4,6 +4,7 @@ import { prisma } from '../../../../prisma/prisma'
 type MatcheRequestBody = {
   date: string // DateTime
   location: string // String
+  maxPlayers?: number // Int, opcional
 }
 // # matches?cursor=2025-05-27T18:00:00.000Z
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end('Método não permitido')
   }
 
-  const { date, location }:MatcheRequestBody = req.body
+  const { date, location, maxPlayers }:MatcheRequestBody = req.body
 
 
   if (!date || !location) {
@@ -24,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     data: {
       date: new Date(date),
       location,
+      maxPlayers: maxPlayers || 10 // Define um valor padrão se não for fornecido
     },
   })
 

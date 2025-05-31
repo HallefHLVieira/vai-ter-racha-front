@@ -12,6 +12,7 @@ model Match {
   date      DateTime
   location  String
   players   Player[]
+  maxPlayers Int @default(10)
   createdAt DateTime @default(now())
 }
 

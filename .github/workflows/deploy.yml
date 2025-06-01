@@ -42,7 +42,7 @@ jobs:
           rm -rf ~/.ssh/id_ed25519
           rm -rf ~/.ssh/known_hosts
           echo "Cleanup completed."
-      - name: Notify Deployment Success
+      # - name: Notify Deployment Success
       #   run: |
       #     echo "Deployment to server completed successfully."
       #     # Aqui você pode adicionar comandos para notificar via Slack, email, etc.

@@ -2,8 +2,7 @@ name: Deploy Next.js to Server
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
@@ -21,12 +20,48 @@ jobs:
           ssh-keyscan -H 31.220.97.248 >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
+        env:
+          # evita prompts e telemetria no build
+          CI: "true"
+          NEXT_TELEMETRY_DISABLED: "1"
         run: |
-          ssh root@31.220.97.248 "
-            cd /dev/vai-ter-racha-front/ &&
-            git pull origin main &&
-            npm install &&
-            npm run build &&
-            pm2 restart app || pm2 start npm --name 'vai-ter-racha' -- start
-          "
+          ssh root@31.220.97.248 <<'EOSSH'
+            set -e                        # se algo falhar, para tudo
+            cd /dev/vai-ter-racha-front
 
+            git pull origin main
+            npm ci                        # mais confiável que npm install
+            npm run build
+
+            # reinicia se existir, senão cria
+            pm2 restart vai-ter-racha --update-env || \
+              pm2 start npm --name "vai-ter-racha" -- start
+          EOSSH
+      - name: Cleanup
+        run: |
+          rm -rf ~/.ssh/id_ed25519
+          rm -rf ~/.ssh/known_hosts
+          echo "Cleanup completed."
+      - name: Notify Deployment Success
+      #   run: |
+      #     echo "Deployment to server completed successfully."
+      #     # Aqui você pode adicionar comandos para notificar via Slack, email, etc.
+      #     # Exemplo: curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment successful!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     echo "Deployment notification sent."
+      # - name: Notify Deployment Failure
+      #   if: failure()
+      #   run: |
+      #     echo "Deployment to server failed."
+      #     # Aqui você pode adicionar comandos para notificar via Slack, email, etc.
+      #     # Exemplo: curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment failed!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     echo "Deployment failure notification sent."
+      # - name: Final Cleanup
+      #   if: always()
+      #   run: |
+      #     echo "Performing final cleanup."
+      #     # Aqui você pode adicionar comandos para limpar caches, logs, etc.
+      #     # Exemplo: rm -rf /tmp/deployment-cache
+      #     echo "Final cleanup completed."
+      # - name: Check PM2 Status
+      #   run: |
+      #     ssh root@

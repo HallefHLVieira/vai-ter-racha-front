@@ -43,8 +43,8 @@ jobs:
             echo "🚀 Iniciando a aplicação..."
             pm2 start npm --name "vai-ter-racha" -- start --update-env
 
-            echo "🧹 Limpando processos orfãos..."
-            pm2 prune
+            # echo "🧹 Limpando processos orfãos..."
+            # pm2 prune
 
             echo "✅ Deploy completo!"
           EOSSH

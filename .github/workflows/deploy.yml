@@ -21,31 +21,40 @@ jobs:
 
       - name: Deploy to Server
         env:
-          # evita prompts e telemetria no build
           CI: "true"
           NEXT_TELEMETRY_DISABLED: "1"
         run: |
           ssh root@31.220.97.248 <<'EOSSH'
-            set -e                        # se algo falhar, para tudo
+            set -e
             cd dev/vai-ter-racha-front
 
+            echo "🔄 Atualizando repositório..."
             git pull origin main
-            npm ci                        # mais confiável que npm install
+
+            echo "📦 Instalando dependências..."
+            npm ci
+
+            echo "🛠 Buildando a aplicação..."
             npm run build
 
-            # reinicia se existir, senão cria
-            pm2 restart vai-ter-racha --update-env || \
-              pm2 start npm --name "vai-ter-racha" -- start
+            echo "♻️ Parando instâncias antigas..."
+            pm2 delete vai-ter-racha || true
 
+            echo "🚀 Iniciando a aplicação..."
+            pm2 start npm --name "vai-ter-racha" -- start --update-env
 
-            # apagando instancias que não estão mais rodando
+            echo "🧹 Limpando processos orfãos..."
             pm2 prune
+
+            echo "✅ Deploy completo!"
           EOSSH
+
       - name: Cleanup
         run: |
           rm -rf ~/.ssh/id_ed25519
           rm -rf ~/.ssh/known_hosts
           echo "Cleanup completed."
+
       # - name: Notify Deployment Success
       #   run: |
       #     echo "Deployment to server completed successfully."

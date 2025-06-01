@@ -36,6 +36,11 @@ jobs:
             # reinicia se existir, senão cria
             pm2 restart vai-ter-racha --update-env || \
               pm2 start npm --name "vai-ter-racha" -- start
+
+
+            # apagando instancias que não estão mais rodando
+            pm2 delete $(pm2 ls | grep -v "vai-ter-racha" | awk '{print $2}') || true
+            pm2 save                     # salva o estado atual do PM2
           EOSSH
       - name: Cleanup
         run: |

@@ -27,7 +27,7 @@ jobs:
         run: |
           ssh root@31.220.97.248 <<'EOSSH'
             set -e                        # se algo falhar, para tudo
-            cd /dev/vai-ter-racha-front
+            cd dev/vai-ter-racha-front
 
             git pull origin main
             npm ci                        # mais confiável que npm install

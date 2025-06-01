@@ -5,7 +5,7 @@ services:
     image: postgres:15
     container_name: racha-db
     ports:
-      - "5432:5432"
+      - "55432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres123

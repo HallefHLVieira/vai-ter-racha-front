@@ -37,6 +37,9 @@ jobs:
             echo "🛠 Buildando a aplicação..."
             npm run build
 
+            echo "🔄 Carregando variáveis do .env..."
+            export $(grep -v '^#' .env | xargs)
+            
             echo "🔄 Executando migrations..."
             npx prisma migrate deploy
 

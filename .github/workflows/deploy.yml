@@ -37,6 +37,9 @@ jobs:
             echo "🛠 Buildando a aplicação..."
             npm run build
 
+            echo "🔄 Executando migrations..."
+            npx prisma migrate deploy
+
             echo "♻️ Parando instâncias antigas..."
             pm2 delete vai-ter-racha || true
 

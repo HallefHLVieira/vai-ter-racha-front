@@ -42,14 +42,14 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-6 space-y-4">
+    <main className="max-w-2xl mx-auto p-6 space-y-4 bg-slate-900/60 rounded-lg shadow-lg">
       <header className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Partidas</h1>
+        <h1 className="text-2xl font-bold text-white">Partidas</h1>
         <a
           href="/novo"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
         >
-          + Nova Pelada
+          + Novo Racha
         </a>
       </header>
 
@@ -68,7 +68,7 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
       )}
 
       {!nextCursor && (
-        <p className="text-center text-sm text-gray-500">Nenhuma partida mais antiga.</p>
+        <p className="text-center text-sm text-gray-300">Nenhuma partida mais antiga.</p>
       )}
     </main>
   )

@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next'
 import { useState } from 'react'
-import { prisma } from '../../prisma/prisma';
-import MatchCard from '@/components/MatchCard';
+import { prisma } from '../../prisma/prisma'
+import MatchCard from '@/components/MatchCard'
 
 type Match = { id: string; date: string; location: string }
 type HomeProps = { initial: Match[]; nextCursor: string | null }
@@ -12,11 +12,12 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
     take: 11,
   })
 
-  const nextCursor = matches.length === 11 ? matches[10].date.toISOString() : null
+  const nextCursor =
+    matches.length === 11 ? matches[10].date.toISOString() : null
 
   return {
     props: {
-      initial: matches.slice(0, 10).map(m => ({
+      initial: matches.slice(0, 10).map((m) => ({
         id: m.id,
         date: m.date.toISOString(),
         location: m.location,
@@ -35,8 +36,9 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
     if (!nextCursor) return
     setLoading(true)
     const res = await fetch(`/api/matches?cursor=${nextCursor}`)
-    const data: { matches: Match[]; nextCursor: string | null } = await res.json()
-    setMatches(prev => [...prev, ...data.matches])
+    const data: { matches: Match[]; nextCursor: string | null } =
+      await res.json()
+    setMatches((prev) => [...prev, ...data.matches])
     setNextCursor(data.nextCursor)
     setLoading(false)
   }
@@ -53,7 +55,7 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
         </a>
       </header>
 
-      {matches.map(m => (
+      {matches.map((m) => (
         <MatchCard key={m.id} date={m.date} location={m.location} />
       ))}
 
@@ -68,7 +70,9 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
       )}
 
       {!nextCursor && (
-        <p className="text-center text-sm text-gray-300">Nenhuma partida mais antiga.</p>
+        <p className="text-center text-sm text-gray-300">
+          Nenhuma partida mais antiga.
+        </p>
       )}
     </main>
   )

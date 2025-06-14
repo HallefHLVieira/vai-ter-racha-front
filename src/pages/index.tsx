@@ -56,7 +56,7 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
       </header>
 
       {matches.map((m) => (
-        <MatchCard key={m.id} date={m.date} location={m.location} />
+        <MatchCard key={m.id} id={m.id} date={m.date} location={m.location} />
       ))}
 
       {nextCursor && (

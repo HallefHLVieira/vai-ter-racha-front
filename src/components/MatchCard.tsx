@@ -1,9 +1,10 @@
 type MatchCardProps = {
   date: string
   location: string
+  id: string
 }
 
-export default function MatchCard({ date, location }: MatchCardProps) {
+export default function MatchCard({ id, date, location }: MatchCardProps) {
   const dateFormatted = new Intl.DateTimeFormat('pt-BR', {
     dateStyle: 'short',
     timeStyle: 'short',
@@ -16,7 +17,7 @@ export default function MatchCard({ date, location }: MatchCardProps) {
         <p className="text-sm text-gray-900 font-semibold">{location}</p>
       </div>
       <a
-        href={`/partida/${encodeURIComponent(date)}`} // ajuste para id real
+        href={`/match/${encodeURIComponent(id)}`} // ajuste para id real
         className="text-green-600 hover:bg-green-600 hover:text-white text-sm bg-slate-50 rounded p-1 pl-2 pr-2"
       >
         Ver

@@ -57,7 +57,7 @@ export default function Novo() {
       >
         &lt; Voltar para partidas
       </Link>
-      <h1 className="text-2xl font-bold mb-1">Criar Nova Pelada</h1>
+      <h1 className="text-2xl font-bold mb-1">Criar novo racha</h1>
       <p className="text-gray-500 mb-6">
         Preencha os dados abaixo para criar uma nova partida
       </p>

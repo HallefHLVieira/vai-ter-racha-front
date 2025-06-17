@@ -1,5 +1,5 @@
 type LayoutProps = {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const Layout = ({ children }: LayoutProps) => {
@@ -8,12 +8,10 @@ export const Layout = ({ children }: LayoutProps) => {
       <header className="bg-gray-900 text-white p-4">
         <h1 className="text-xl">Vai ter racha</h1>
       </header>
-      <main className="flex-grow p-4">
-        {children}
-      </main>
+      <main className="flex-grow p-4">{children}</main>
       <footer className="bg-gray-900 text-white p-4 text-center">
         © 2025 Vai ter racha
       </footer>
     </div>
-  );
+  )
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { GetServerSideProps } from 'next'
 import { useState } from 'react'
 import { prisma } from '../../prisma/prisma'
@@ -44,9 +45,10 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-6 space-y-4 bg-slate-900/60 rounded-lg shadow-lg">
+    // max-w-md mx-auto bg-white rounded-lg shadow p-8
+    <main className="max-w-2xl mx-auto p-6 space-y-4 bg-white rounded-lg shadow-lg">
       <header className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-white">Partidas</h1>
+        <h1 className="text-2xl font-bold">Partidas</h1>
         <a
           href="/novo"
           className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"

@@ -48,7 +48,13 @@ export default function MatchPage({ match }: { match: MatchWithPlayers }) {
       <div className="font-semibold flex max-w bg-gray-900 rounded-lg shadow-lg p-4 mb-6 text-white text-inline justify-between items-center">
         <h1>{match.location}</h1>
         <div className="h-5 p-1 flex bg-yellow-600 items-center justify-center rounded text-sm">
-          <span>{new Date(match.date).toLocaleDateString()}</span>
+          <span>
+            {new Date(match.date).toLocaleDateString('pt-BR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            })}
+          </span>
         </div>
       </div>
       <div className="mb-6">

@@ -29,7 +29,7 @@ model Player {
   id        String  @id @default(uuid())
   matchId   String
   match     Match   @relation(fields: [matchId], references: [id])
-  userId    String
+  userId    String?
   user      User?    @relation(fields: [userId], references: [id])
   confirmed Boolean @default(false)
   checkedIn Boolean @default(false)

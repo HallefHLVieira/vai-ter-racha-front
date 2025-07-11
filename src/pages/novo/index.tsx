@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 export default function Novo() {
   const [date, setDate] = useState('')
@@ -9,6 +10,17 @@ export default function Novo() {
   const [maxPlayers, setMaxPlayers] = useState(10)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/login')
+    }
+  }, [status, router])
+
+  if (status === 'loading') return <div>Carregando...</div>
+  if (!session) return null
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()

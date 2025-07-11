@@ -6,10 +6,13 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const { id } = req.query
+
+  // Verifica se o id da partida é válido
   if (!id || typeof id !== 'string') {
     return res.status(400).json({ error: 'ID da partida inválido' })
   }
 
+  // verifica se o método chamado está correto
   if (req.method === 'GET') {
     try {
       const match = await getMatchById(id as string)

@@ -1,13 +1,29 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { GetServerSideProps } from 'next'
-import { useState } from 'react'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '../pages/api/auth/[...nextauth]'
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import { prisma } from '../../prisma/prisma'
 import MatchCard from '@/components/MatchCard'
 
 type Match = { id: string; date: string; location: string }
 type HomeProps = { initial: Match[]; nextCursor: string | null }
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async (
+  context: GetServerSidePropsContext,
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
   const matches = await prisma.match.findMany({
     orderBy: { date: 'desc' },
     take: 11,
@@ -18,20 +34,41 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 
   return {
     props: {
-      initial: matches.slice(0, 10).map((m) => ({
-        id: m.id,
-        date: m.date.toISOString(),
-        location: m.location,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      initial: matches.slice(0, 10).map((match: any) => ({
+        id: match.id,
+        date: match.date.toISOString(),
+        location: match.location,
       })),
       nextCursor,
+      // session: {
+      //   ...session,
+      //   user: {
+      //     id: session.user?.id ?? null,
+      //     name: session.user?.name ?? null,
+      //     phone: session.user?.phone ?? null,
+      //     role: session.user?.role ?? 'JOGADOR',
+      //   },
+      // },
     },
   }
 }
 
 export default function Home({ initial, nextCursor: cursor }: HomeProps) {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [matches, setMatches] = useState(initial)
   const [nextCursor, setNextCursor] = useState<string | null>(cursor)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/login')
+    }
+  }, [status, router])
+
+  if (status === 'loading') return <div>Carregando...</div>
+  if (!session) return null
 
   async function loadMore() {
     if (!nextCursor) return

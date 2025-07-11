@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../../prisma/prisma'
+import { requireAuth } from '@/helpers/requireAuth'
 
 type MatcheRequestBody = {
   date: string // DateTime
@@ -11,6 +12,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const session = await requireAuth(req, res)
+  if (!session) return
+
   if (req.method === 'POST') {
     const { date, location }: MatcheRequestBody = req.body
     if (!date || !location) {

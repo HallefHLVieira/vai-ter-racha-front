@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 export default function InscreverJogador() {
   const router = useRouter()
@@ -8,6 +9,17 @@ export default function InscreverJogador() {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/login')
+    }
+  }, [status, router])
+
+  if (status === 'loading') return <div>Carregando...</div>
+  if (!session) return null
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

@@ -1,11 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../../../../prisma/prisma'
+import { requireAuth } from '@/helpers/requireAuth'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const session = await requireAuth(req, res)
+  if (!session) return
+
   const { id } = req.query
+
   if (!id || typeof id !== 'string') {
     return res.status(400).json({ error: 'ID da partida inválido' })
   }
@@ -19,7 +24,7 @@ export default async function handler(
     try {
       const player = await prisma.player.create({
         data: {
-          name,
+          userId: req.body.userId,
           matchId: id,
         },
       })

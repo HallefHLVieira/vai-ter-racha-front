@@ -1,10 +1,24 @@
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { Match } from '@prisma/client'
+import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (context: any) => {
   const { params } = context
   const { id } = params
+
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  console.log('### CHEGUEI AQUI')
 
   try {
     const response = await fetch(`http://localhost:3000/api/match/${id}`)
@@ -77,6 +91,12 @@ export default function MatchPage({ match }: { match: MatchWithPlayers }) {
                 <th className="px-4 py-2 border-b text-left text-gray-700">
                   Nome
                 </th>
+                <th className="px-4 py-2 border-b text-center text-gray-700">
+                  Pg
+                </th>
+                <th className="px-4 py-2 border-b text-center text-gray-700">
+                  Presente
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -86,6 +106,36 @@ export default function MatchPage({ match }: { match: MatchWithPlayers }) {
                   <tr key={player.id} className="hover:bg-gray-50">
                     <td className="px-4 py-2 border-b">{idx + 1}</td>
                     <td className="px-4 py-2 border-b">{player.name}</td>
+                    <td className="px-4 py-2 border-b text-center">
+                      <input
+                        type="checkbox"
+                        checked={!!player.confirmed}
+                        onChange={async (e) => {
+                          const confirmed = e.target.checked
+                          await fetch(`/api/player/${player.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ confirmed }),
+                          })
+                        }}
+                        className="w-5 h-5 accent-green-600 cursor-pointer"
+                      />
+                    </td>
+                    <td className="px-4 py-2 border-b text-center">
+                      <input
+                        type="checkbox"
+                        checked={!!player.checkedIn}
+                        onChange={async (e) => {
+                          const checkedIn = e.target.checked
+                          await fetch(`/api/player/${player.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ checkedIn }),
+                          })
+                        }}
+                        className="w-5 h-5 accent-blue-600 cursor-pointer"
+                      />
+                    </td>
                   </tr>
                 ))
               ) : (

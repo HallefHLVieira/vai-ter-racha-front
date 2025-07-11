@@ -16,6 +16,13 @@ export default async function handler(
   if (!session) return
 
   if (req.method === 'POST') {
+    // Só permite ADMIN criar partidas
+    if (!session.user || !session.user.role || session.user.role !== 'ADMIN') {
+      return res
+        .status(403)
+        .json({ error: 'Apenas administradores podem criar partidas.' })
+    }
+
     const { date, location }: MatcheRequestBody = req.body
     if (!date || !location) {
       return res

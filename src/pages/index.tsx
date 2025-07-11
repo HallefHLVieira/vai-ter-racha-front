@@ -86,12 +86,14 @@ export default function Home({ initial, nextCursor: cursor }: HomeProps) {
     <main className="max-w-2xl mx-auto p-6 space-y-4 bg-white rounded-lg shadow-lg">
       <header className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Partidas</h1>
-        <a
-          href="/novo"
-          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-        >
-          + Novo Racha
-        </a>
+        {session.user?.role === 'ADMIN' && (
+          <a
+            href="/novo"
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+          >
+            + Novo Racha
+          </a>
+        )}
       </header>
 
       {matches.map((m) => (

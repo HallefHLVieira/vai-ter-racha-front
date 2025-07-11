@@ -8,9 +8,6 @@
     "start": "next start -p 3000 -H 0.0.0.0",
     "lint": "next lint"
   },
-  "prisma": {
-    "seed": "tsx prisma/seeds/seed.ts"
-  },
   "dependencies": {
     "@prisma/client": "^6.8.2",
     "bcryptjs": "^3.0.2",

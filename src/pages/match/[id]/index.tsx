@@ -2,6 +2,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { Match } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
+import { prisma } from '../../../../prisma/prisma'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (context: any) => {
@@ -21,12 +22,15 @@ export const getServerSideProps = async (context: any) => {
   console.log('### CHEGUEI AQUI')
 
   try {
-    const response = await fetch(`http://localhost:3000/api/match/${id}`)
-    if (!response.ok) {
-      throw new Error('Erro ao buscar dados da partida')
-    }
+    // Busque direto no banco!
+    const matchData = await prisma.match.findUnique({
+      where: { id },
+      include: { players: true },
+    })
 
-    const matchData = await response.json()
+    if (!matchData) {
+      return { notFound: true }
+    }
 
     return {
       props: {

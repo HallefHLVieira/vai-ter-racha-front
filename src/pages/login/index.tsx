@@ -16,7 +16,6 @@ export default function Login() {
       redirect: false,
       callbackUrl: '/',
     })
-    console.log('### -> ', res)
 
     if (res?.error) setError('Telefone ou senha inválidos')
     else window.location.href = '/'

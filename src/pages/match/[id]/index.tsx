@@ -19,8 +19,6 @@ export const getServerSideProps = async (context: any) => {
     }
   }
 
-  console.log('### CHEGUEI AQUI')
-
   try {
     // Busque direto no banco!
     const matchData = await prisma.match.findUnique({
@@ -34,7 +32,16 @@ export const getServerSideProps = async (context: any) => {
 
     return {
       props: {
-        match: matchData,
+        match: {
+          ...matchData,
+          date: matchData.date.toISOString(),
+          createdAt: matchData.createdAt.toISOString(), // Adicione esta linha!
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          players: matchData.players.map((p: any) => ({
+            ...p,
+            // Se houver campos Date em players, converta também!
+          })),
+        },
       },
     }
   } catch (error) {

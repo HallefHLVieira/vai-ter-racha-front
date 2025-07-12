@@ -5,8 +5,6 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 export async function requireAuth(req: any, res: any) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
-    console.log('Não há sessão ativa')
-
     res.status(401).json({ error: 'Não autorizado' })
     return null
   }

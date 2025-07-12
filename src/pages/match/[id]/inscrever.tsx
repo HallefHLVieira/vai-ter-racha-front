@@ -11,6 +11,8 @@ export default function InscreverJogador() {
   const [error, setError] = useState('')
 
   const { data: session, status } = useSession()
+  const userId = session?.user?.id
+  const userName = session?.user?.name
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -28,7 +30,9 @@ export default function InscreverJogador() {
     const res = await fetch(`/api/match/${id}/players`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({
+        userId,
+      }),
     })
     if (res.ok) {
       router.push(`/match/${id}`)
@@ -56,11 +60,11 @@ export default function InscreverJogador() {
           <input
             id="name"
             type="text"
-            value={name}
+            value={userName}
             onChange={(e) => setName(e.target.value)}
             required
             className="block w-full border border-gray-300 rounded-md p-2"
-            placeholder="Seu nome"
+            disabled
           />
         </div>
         {error && <p className="text-green-600 text-sm">{error}</p>}

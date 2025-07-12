@@ -16,11 +16,6 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
-    const { name } = req.body
-    if (!name || typeof name !== 'string') {
-      return res.status(400).json({ error: 'Nome do jogador é obrigatório' })
-    }
-
     try {
       const player = await prisma.player.create({
         data: {

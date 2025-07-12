@@ -23,7 +23,13 @@ export const getServerSideProps = async (context: any) => {
     // Busque direto no banco!
     const matchData = await prisma.match.findUnique({
       where: { id },
-      include: { players: true },
+      include: {
+        players: {
+          include: {
+            user: true, // Inclui o usuário relacionado ao player
+          },
+        },
+      },
     })
 
     if (!matchData) {
@@ -35,11 +41,11 @@ export const getServerSideProps = async (context: any) => {
         match: {
           ...matchData,
           date: matchData.date.toISOString(),
-          createdAt: matchData.createdAt.toISOString(), // Adicione esta linha!
+          createdAt: matchData.createdAt.toISOString(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           players: matchData.players.map((p: any) => ({
             ...p,
-            // Se houver campos Date em players, converta também!
+            name: p.user ? p.user.name : '',
           })),
         },
       },
@@ -89,7 +95,7 @@ export default function MatchPage({ match }: { match: MatchWithPlayers }) {
             href={`/match/${match.id}/inscrever`}
             className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition font-bold"
           >
-            +
+            Cadastrar
           </Link>
         </div>
         <div>

@@ -6,7 +6,6 @@ import { useSession } from 'next-auth/react'
 export default function InscreverJogador() {
   const router = useRouter()
   const { id } = router.query
-  const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -61,7 +60,6 @@ export default function InscreverJogador() {
             id="name"
             type="text"
             value={userName}
-            onChange={(e) => setName(e.target.value)}
             required
             className="block w-full border border-gray-300 rounded-md p-2"
             disabled

@@ -150,7 +150,7 @@ export default function MatchPage({ match }: { match: MatchWithPlayers }) {
                             body: JSON.stringify({ checkedIn }),
                           })
                         }}
-                        className="w-5 h-5 accent-blue-600 cursor-pointer"
+                        className="w-5 h-5 accent-yellow-600 cursor-pointer"
                       />
                     </td>
                   </tr>

@@ -17,14 +17,15 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H 31.220.97.248 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 187.19.219.19 >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
         env:
           CI: "true"
           NEXT_TELEMETRY_DISABLED: "1"
         run: |
-          ssh root@31.220.97.248 <<'EOSSH'
+          # ssh root@31.220.97.248 <<'EOSSH'
+          ssh -p 10022 server@187.19.219.19 <<'EOSSH'
             set -e
             cd dev/vai-ter-racha-front
 

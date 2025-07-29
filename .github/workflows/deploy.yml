@@ -14,20 +14,17 @@ jobs:
 
       - name: Setup SSH key
         run: |
-          set -x
           mkdir -p ~/.ssh
-          printf "%s\n" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -p 10022 -H 187.19.219.19 >> ~/.ssh/known_hosts
-          ls -la ~/.ssh
-          cat ~/.ssh/id_ed25519 | head -n 5
-        shell: bash
+          ssh-keyscan -H 31.220.97.248 >> ~/.ssh/known_hosts
+
       - name: Deploy to Server
         env:
           CI: "true"
           NEXT_TELEMETRY_DISABLED: "1"
         run: |
-          ssh -p 10022 server@187.19.219.19 <<'EOSSH'
+          ssh root@31.220.97.248 <<'EOSSH'
             set -e
             cd dev/vai-ter-racha-front
 

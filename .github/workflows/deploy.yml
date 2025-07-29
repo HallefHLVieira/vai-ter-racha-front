@@ -24,7 +24,6 @@ jobs:
           CI: "true"
           NEXT_TELEMETRY_DISABLED: "1"
         run: |
-          # ssh root@31.220.97.248 <<'EOSSH'
           ssh -p 10022 server@187.19.219.19 <<'EOSSH'
             set -e
             cd dev/vai-ter-racha-front

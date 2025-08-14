@@ -16,11 +16,15 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
+    const { userId, name, invitedById } = req.body
+
     try {
       const player = await prisma.player.create({
         data: {
-          userId: req.body.userId,
           matchId: id,
+          userId: userId ?? null,
+          invitePlayerName: name,
+          invitedById: invitedById ?? null,
         },
       })
       return res.status(201).json(player)

@@ -14,6 +14,8 @@ model User {
   password  String
   role      Role     @default(JOGADOR)
   players   Player[]
+  invitedPlayers Player[] @relation("InvitedPlayers")
+
 }
 
 model Match {
@@ -31,6 +33,9 @@ model Player {
   match     Match   @relation(fields: [matchId], references: [id])
   userId    String?
   user      User?    @relation(fields: [userId], references: [id])
+  invitedById String?   // id do usuário que convidou
+  invitedBy    User?     @relation("InvitedPlayers", fields: [invitedById], references: [id])
+  invitePlayerName String?
   confirmed Boolean @default(false)
   checkedIn Boolean @default(false)
 }

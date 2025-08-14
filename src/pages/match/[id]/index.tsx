@@ -3,6 +3,9 @@ import { Match } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import { prisma } from '../../../../prisma/prisma'
+import { useState } from 'react'
+import router from 'next/router'
+import { useSession } from 'next-auth/react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (context: any) => {
@@ -68,6 +71,10 @@ type MatchWithPlayers = Match & {
 }
 
 export default function MatchPage({ match }: { match: MatchWithPlayers }) {
+  const [showInvite, setShowInvite] = useState(false)
+  const [inviteName, setInviteName] = useState('')
+  const { data: session } = useSession()
+
   return (
     <main className="max-w-md mx-auto bg-white rounded-lg shadow p-4">
       <Link
@@ -97,8 +104,56 @@ export default function MatchPage({ match }: { match: MatchWithPlayers }) {
           >
             Cadastrar
           </Link>
+          <button
+            className="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition font-bold"
+            onClick={() => setShowInvite(true)}
+          >
+            Levar alguém
+          </button>
         </div>
-        <div>
+
+        {showInvite && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm">
+              <h2 className="text-lg font-bold mb-4">Jogador convidado</h2>
+              <input
+                type="text"
+                placeholder="Nome do convidado"
+                value={inviteName}
+                onChange={(e) => setInviteName(e.target.value)}
+                className="border rounded w-full p-2 mb-4"
+              />
+              <div className="flex gap-2 justify-end">
+                <button
+                  className="bg-gray-300 px-3 py-1 rounded"
+                  onClick={() => setShowInvite(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="bg-yellow-600 text-white px-3 py-1 rounded"
+                  onClick={async () => {
+                    await fetch(`/api/match/${match.id}/players`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        name: inviteName,
+                        invitedById: session?.user?.id,
+                      }),
+                    })
+                    setShowInvite(false)
+                    setInviteName('')
+                    router.replace(`/match/${match.id}`)
+                  }}
+                >
+                  Convidar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="overflow-y-auto max-h-[60vh]">
           <table className="min-w-full bg-white border border-gray-200 rounded">
             <thead>
               <tr>
@@ -122,7 +177,9 @@ export default function MatchPage({ match }: { match: MatchWithPlayers }) {
                 match.players.map((player: any, idx: number) => (
                   <tr key={player.id} className="hover:bg-gray-50">
                     <td className="px-4 py-2 border-b">{idx + 1}</td>
-                    <td className="px-4 py-2 border-b">{player.name}</td>
+                    <td className="px-4 py-2 border-b">
+                      {player.name || player.invitePlayerName}
+                    </td>
                     <td className="px-4 py-2 border-b text-center">
                       <input
                         type="checkbox"

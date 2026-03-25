@@ -6,7 +6,7 @@ Sempre que íamos marcar uma pelada (ou “racha”, como dizemos aqui no Ceará
 
 A segunda dor era o sorteio dos times. Normalmente, os jogadores eram escolhidos “a dedo”, o que frequentemente gerava desconforto. Os mais habilidosos sempre eram os primeiros a ser escolhidos, e os demais acabavam sobrando, formando times visivelmente desequilibrados. Isso acabava desmotivando parte da galera.
 
-A partir desses dois problemas nasceu a ideia desta aplicação, cujo MVP é bem direto:
+A partir desses dois problemas nasceu a ideia desta aplicação, cujo MVP é bem direto: 
 
 - ✅ Cada jogador pode confirmar presença em uma pelada com apenas um clique.  
 - ✅ O organizador, no início do jogo, faz o check-in dos presentes e clica em **“Sortear times”**, para uma divisão imparcial e aleatória.  

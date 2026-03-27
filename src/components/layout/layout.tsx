@@ -4,7 +4,7 @@ type LayoutProps = {
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="flex flex-col min-h-screen bg-[url('/assets/images/bg_fultball.jpg')] bg-cover bg-center dark">
+    <div className="flex flex-col min-h-screen bg-[url('/assets/images/bg_fultball.jpg')] bg-cover bg-center">
       <header className="bg-gray-900 text-white p-4">
         <h1 className="text-xl">Tá valendo</h1>
       </header>
